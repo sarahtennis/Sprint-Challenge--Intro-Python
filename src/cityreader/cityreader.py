@@ -1,4 +1,5 @@
 import csv
+import sys
 
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, latitude, and longitude.
@@ -73,14 +74,41 @@ for c in cities:
 # Tucson: (32.1558,-110.8777)
 # Salt Lake City: (40.7774,-111.9301)
 
-# TODO Get latitude and longitude values from the user
-
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
   within = []
+
+  try:
+    # normalize and verify float (or floatable) input data
+    norm_lat1 = min(float(lat1), float(lat2))
+    norm_lat2 = max(float(lat1), float(lat2))
+    norm_lon1 = min(float(lon1), float(lon2))
+    norm_lon2 = max(float(lon1), float(lon2))
+
+    for city in cities:
+      if city.lat >= norm_lat1 and city.lat <= norm_lat2 and city.lon >= norm_lon1 and city.lon <= norm_lon2:
+        within.append(city)
+  
+  except:
+    return "Invalid input"
 
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
 
   return within
+
+# Get user input for coordinate square
+first_coords = input("Enter lat1,lon1: ")
+second_coords = input("Enter lat2,lon2: ")
+
+# parse input into list
+first_coords = first_coords.split(",")
+second_coords = second_coords.split(",")
+
+try:
+  for city in cityreader_stretch(first_coords[0], first_coords[1], second_coords[0], second_coords[1], cities):
+    # Albuquerque: (35.1055,-106.6476)
+    print(f"{city.name}: ({city.lat},{city.lon})")
+except NameError as error:
+  print(error)
